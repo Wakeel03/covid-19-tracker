@@ -1,0 +1,164 @@
+{% extends 'tracker/base.html' %}
+
+{% block content %}
+
+<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+
+<div class="top-bar">
+    <div class="title">Covid-19 Tracker</div>
+    <div class="country-list">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <select class="country-drop-list" name="country" id="country">
+                {% for country in countries %}
+                <option value="{{country.id}}" 
+                    {% if current_country_selected == country.id %}selected="selected"{% endif %}>
+                    {{country.name}}
+                </option>
+                {% endfor %}
+            </select>
+            <input type="text" class="btn-days" name="days" placeholder="{{days}} days">
+            <button class="btn_search_country"type="submit">GO</button>
+        </form>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="stat-cards">
+    <div class="row">
+    <div class="col-4">
+        <a href="#">
+            <div class="stat-card active-danger" id="card-cases">
+                <h1 class="card-title">Coronavirus Cases</h1>
+                <h4 class="card-desc-today">Last 24 hours</h4>
+                <h2 class="card-stat danger">+{{data.todayCases}}</h2>
+                <h3 class="card-total-stat">Total: {{data.cases}}</h3>
+            </div>
+        </a>
+        
+    </div> 
+    <div class="col-4">
+        <a href="#">
+            <div class="stat-card" id="card-recovered">
+                <h1 class="card-title">Recovered</h1>
+                <h4 class="card-desc-today">Last 24 hours</h4>
+                <h2 class="card-stat safe">+{{data.todayRecovered}}</h2>
+                <h3 class="card-total-stat">Total: {{data.recovered}}</h3>
+            </div>             
+        </a>
+
+    </div>
+     <div class="col-4">
+        <a href="#">
+            <div class="stat-card" id="card-deaths">
+            <h1 class="card-title">Deaths</h1>
+            <h4 class="card-desc-today">Last 24 hours</h4>
+            <h2 class="card-stat danger">+{{data.todayDeaths}}</h2>
+            <h3 class="card-total-stat">Total: {{data.deaths}}</h3>
+        </div> 
+        </a>
+                
+    </div>
+</div>
+
+</div>
+
+<div class="stat-graph">
+    <div id="myChart"></div>
+</div>
+
+<div class="world-map"></div>
+
+<script>
+    var card_cases = document.getElementById('card-cases')
+    var card_recovered = document.getElementById('card-recovered')
+    var card_deaths = document.getElementById('card-deaths')
+
+    var chart_title = "Coronavirus Cases"
+    
+    let myConfig = {
+        type: 'area',
+        title: {
+            text: chart_title,
+            fontSize: 24,
+        },
+        legend: {
+            draggable: true,
+        },
+        scaleX: {
+            // Set scale label
+            label: { text: 'Date' },
+            // Convert text on scale indices
+            labels: {{dates | safe}} 
+        },
+        scaleY: {
+            // Scale label with unicode character
+            label: { text: 'Number' },
+        },
+        plot: {
+            // Animation docs here:
+            // https://www.zingchart.com/docs/tutorials/styling/animation#effect
+            animation: {
+            effect: 'ANIMATION_EXPAND_BOTTOM',
+            method: 'ANIMATION_STRONG_EASE_OUT',
+            sequence: 'ANIMATION_BY_NODE',
+            speed: 275,
+            }
+        },
+        plotarea: {
+            marginLeft: 'dynamic',
+            marginRight: 'dynamic'
+        },
+        series: [
+            {
+            // plot 1 values, linear data
+            values: {{history_cases}},
+
+            },
+        ]
+        };
+    
+    chart_renderer(1)
+
+    card_cases.addEventListener('click', () => chart_renderer(1))
+
+    card_recovered.addEventListener('click', ()=> chart_renderer(2))
+
+    card_deaths.addEventListener('click', () => chart_renderer(3))
+
+    function chart_renderer(selection){
+        card_cases.classList.remove("active-danger")
+        card_recovered.classList.remove("active-safe")
+        card_deaths.classList.remove("active-danger") 
+        
+        if (selection === 1){
+            card_cases.classList.add("active-danger")
+            chart_title = "Coronavirus Cases"
+            myConfig.series[0].values = {{history_cases}}
+        }
+
+        if (selection === 2){
+            card_recovered.classList.add("active-safe")
+            chart_title = "Number Recovered"
+            myConfig.series[0].values = {{history_recovered}}
+        }
+
+        if (selection === 3){
+            card_deaths.classList.add("active-danger")
+            chart_title = "Number of Deaths"
+            myConfig.series[0].values = {{history_deaths}}
+        }
+
+        myConfig.title.text = chart_title
+        
+        zingchart.render({
+            id: 'myChart',
+            data: myConfig,
+        });   
+    }
+
+    
+</script>
+
+{% endblock %}

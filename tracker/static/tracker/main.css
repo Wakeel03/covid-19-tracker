@@ -1,0 +1,116 @@
+*{
+    font-family: 'Montserrat', sans-serif;
+}
+
+body{
+    background-color: #F9F8F8;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+a:hover{
+    text-decoration: none;
+    color: black;
+}
+
+.top-bar{
+    display: flex;
+    margin-top: 2em;
+    justify-content: space-between;
+}
+
+.country-drop-list{
+    width: 200px;
+    height: 40px;
+    margin-right: .5em;
+    padding: .5em;
+    border-radius: 4px;
+}
+
+.btn-days{
+    width: 120px;
+    height: 40px;
+    border-radius: 4px;
+    padding: .5em;
+    margin-right: .5em;
+}
+
+.btn_search_country{
+    width: 100px;
+    height: 40px;
+    border-style: none;
+    color: white;
+    background-color: #E82424;
+    border-radius: 4px;
+}
+
+.title{
+    text-transform: uppercase;
+    font-weight: 500;
+    color: #E82424;
+    font-size: 2em;
+}
+
+.divider{
+    width: 100%;
+    height: 1px;
+    background-color: black;
+    margin-top: 2em;
+}
+
+.row{
+    margin-top: 3em;
+    margin-bottom: 3em;
+}
+
+.stat-card{
+    padding: 2em;
+    width: 100%;
+    height: 180px;
+    background-color: white;
+    border-radius: .4em;
+    box-shadow: 2px 2px 3px rgb(41, 40, 40);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.card-title{
+    font-size: 1.5em;
+    color: black;
+    font-weight: 500;
+}
+
+.card-desc-today{
+    font-size: .8em;
+    color: #353634;
+}
+    
+.card-stat{
+    font-size: 2em;
+    font-weight: 500;
+}
+
+.card-total-stat{
+    font-size: 1em;
+    font-weight: 300;
+}
+
+.danger{
+    color: #E82424;
+}
+
+.safe{
+    color: #67CF15;
+}
+
+.active-danger {
+    border-left: #E82424 5px solid;
+}
+
+.active-safe {
+    border-left: #67CF15 5px solid;
+}
